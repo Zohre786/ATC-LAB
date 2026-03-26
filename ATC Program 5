@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <math.h>
+
+#define MAX 100
+
+int top = -1;
+int values[MAX];
+char ops[MAX];
+
+// Stack functions
+void pushValue(int val) {
+    values[++top] = val;
+}
+
+int popValue() {
+    return values[top--];
+}
+
+void pushOp(char op) {
+    ops[++top] = op;
+}
+
+char popOp() {
+    return ops[top--];
+}
+
+// Function to get precedence
+int precedence(char op) {
+    if(op == '+' || op == '-') return 1;
+    if(op == '*' || op == '/') return 2;
+    return 0;
+}
+
+// Apply operator
+int applyOp(int a, int b, char op) {
+    switch(op) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+    }
+    return 0;
+}
+
+int main() {
+    char exp[MAX];
+    printf("Enter expression: ");
+    scanf("%s", exp);
+
+    int i = 0;
+    while(exp[i]) {
+        if(isdigit(exp[i])) {
+            int val = 0;
+            while(isdigit(exp[i])) {
+                val = val * 10 + (exp[i] - '0');
+                i++;
+            }
+            pushValue(val);
+            continue;
+        }
+        else {
+            while(top >= 0 && precedence(ops[top]) >= precedence(exp[i])) {
+                int b = popValue();
+                int a = popValue();
+                char op = popOp();
+                pushValue(applyOp(a, b, op));
+            }
+            pushOp(exp[i]);
+        }
+        i++;
+    }
+
+    while(top >= 0) {
+        int b = popValue();
+        int a = popValue();
+        char op = popOp();
+        pushValue(applyOp(a, b, op));
+    }
+
+    printf("Result = %d\n", popValue());
+
+    return 0;
+}
