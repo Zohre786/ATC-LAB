@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 10
+
+struct expr {
+    char op;
+    char arg1[10];
+    char arg2[10];
+    char result[10];
+};
+
+int main() {
+    int n, i, j;
+    struct expr e[MAX];
+
+    printf("Enter number of expressions: ");
+    scanf("%d", &n);
+
+    printf("Enter expressions (format: result = arg1 op arg2)\n");
+
+    for(i = 0; i < n; i++) {
+        scanf("%s = %s %c %s", e[i].result, e[i].arg1, &e[i].op, e[i].arg2);
+    }
+
+    printf("\nOptimized Code:\n");
+
+    for(i = 0; i < n; i++) {
+        int found = 0;
+
+        for(j = 0; j < i; j++) {
+            // Check for common subexpression
+            if(strcmp(e[i].arg1, e[j].arg1) == 0 &&
+               strcmp(e[i].arg2, e[j].arg2) == 0 &&
+               e[i].op == e[j].op) {
+
+                printf("%s = %s\n", e[i].result, e[j].result);
+                found = 1;
+                break;
+            }
+        }
+
+        if(!found) {
+            printf("%s = %s %c %s\n", e[i].result, e[i].arg1, e[i].op, e[i].arg2);
+        }
+    }
+
+    return 0;
+}
