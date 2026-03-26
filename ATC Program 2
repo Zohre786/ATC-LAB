@@ -1,0 +1,30 @@
+{
+    char c, prev;
+
+    printf("Enter your C code (Ctrl+Z to end):\n");
+
+    while ((c = getchar()) != EOF) {
+
+        // Single-line comment //
+        if (c == '/' && (prev = getchar()) == '/') {
+            while ((c = getchar()) != '\n' && c != EOF);
+            putchar('\n');
+        }
+
+        // Multi-line comment /* */
+        else if (c == '/' && prev == '*') {
+            while (1) {
+                c = getchar();
+                if (c == '*' && (prev = getchar()) == '/')
+                    break;
+            }
+        }
+
+        // Normal character
+        else {
+            putchar(c);
+        }
+    }
+
+    return 0;
+}
