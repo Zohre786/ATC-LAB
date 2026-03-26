@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+
+int isValidIf(char str[]) {
+    // check "if(" and ')'
+    if (strncmp(str, "if(", 3) == 0 && strchr(str, ')') && strchr(str, ';'))
+        return 1;
+    return 0;
+}
+
+int isValidIfElse(char str[]) {
+    // check "if(...);else ..."
+    if (strstr(str, "if(") && strstr(str, ")") && strstr(str, "else") && strchr(str, ';'))
+        return 1;
+    return 0;
+}
+
+int isValidWhile(char str[]) {
+    // check "while(...)"
+    if (strncmp(str, "while(", 6) == 0 && strchr(str, ')') && strchr(str, ';'))
+        return 1;
+    return 0;
+}
+
+int main() {
+    char str[100];
+
+    printf("Enter control statement: ");
+    gets(str);  // (used for simplicity in labs)
+
+    if (isValidIfElse(str))
+        printf("Valid IF-ELSE statement\n");
+    else if (isValidIf(str))
+        printf("Valid IF statement\n");
+    else if (isValidWhile(str))
+        printf("Valid WHILE statement\n");
+    else
+        printf("Invalid Control Statement\n");
+
+    return 0;
+}
